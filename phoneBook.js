@@ -35,9 +35,11 @@ module.exports.remove = function remove(query) {
         console.log('По запросу "' + query + '" совпадений не найдено');
         return null;
     }
+    var offset = 0;
     for (var i = 0; i < len; i++) {
-        var tail = phoneBook.splice(index[i]).splice(1);
+        var tail = phoneBook.splice(index[i] - offset).splice(1);
         phoneBook = phoneBook.concat(tail);
+        offset++;
     }
     console.log('Удален ' + len + ' контакт');
     return true;
