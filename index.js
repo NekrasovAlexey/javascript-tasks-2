@@ -7,6 +7,7 @@ phoneBook.add('Сергей', '7 999 6667778', 'gs@example.com');
 phoneBook.add('Сергей 2', '999 4433444', 'gs@example.com');
 phoneBook.add('Олег', '+7 (999) 777-7-777', 'just7@yandex-team.ru');
 phoneBook.add('Максим', '222-7-222', 'max@example.com');
+phoneBook.add('Ру', '7 999 6667778', 'ру@ру.рф');
 
 // Невалидные данные не должны попадать в книгу!
 phoneBook.add('Честный Хрюндель', 'invalid phone', 'honest-hrundel');
@@ -40,3 +41,29 @@ phoneBook.importFromCsv('./backup.csv');
 // Добавлено 4 контакта
 
 phoneBook.showTable();
+
+console.log('test');
+console.log('valid num');
+phoneBook.add('1', '+7 (111) 777-2-222', 'a@a.ru');
+phoneBook.add('1', '+7 (111) 777 2 222', 'a@a.ru');
+phoneBook.add('1', '+7 111 777-2-222', 'a@a.ru');
+phoneBook.add('1', '7 111 777-2-222', 'a@a.ru');
+phoneBook.add('1', '111 777-2-222', 'a@a.ru');
+phoneBook.add('1', '71117772222', 'a@a.ru');
+phoneBook.add('1', '+34 111 777-2-222', 'a@a.ru');
+console.log('invalid num');
+phoneBook.add('1', '777-2-222', 'a@a.ru');
+phoneBook.add('1', 'АБС-6666', 'a@a.ru');
+phoneBook.add('1', '+7 (111) 777%2%222', 'a@a.ru');
+phoneBook.add('1', '+7 (111 777-2-222', 'a@a.ru');
+phoneBook.add('1', '7+ (111) 777-2-222', 'a@a.ru');
+phoneBook.add('1', '-7 (111) 777-2-222', 'a@a.ru');
+console.log('valid email');
+phoneBook.add('1', '+7 (111) 777-2-222', 'info@example.com');
+phoneBook.add('1', '+7 (111) 777-2-222', 'info@example.com.ru');
+phoneBook.add('1', '+7 (111) 777-2-222', 'info@инфо.рф');
+console.log('invalid email');
+phoneBook.add('1', '+7 (111) 777-2-222', 'info@yandex');
+phoneBook.add('1', '+7 (111) 777-2-222', 'info@yandex@ya.ru');
+phoneBook.add('1', '+7 (111) 777-2-222', 'info.yandex.ru');
+
