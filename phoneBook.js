@@ -3,9 +3,9 @@
 var phoneBook = [];
 module.exports.add = function add(name, phone, email) {
     if (isValidNumber(phone) && isValidEmail(email)) {
-        phoneBook[phoneBook.length] = {name: name,
-                                       phone: phone,
-                                       email: email};
+        phoneBook.push({name: name,
+                          phone: phone,
+                          email: email});
         console.log('Контакт успешно добавлен');
         return true;
     }
@@ -14,7 +14,7 @@ module.exports.add = function add(name, phone, email) {
 
 module.exports.find = function find(query) {
     query = query || '';
-    var index = findIndex(query);
+    var index = findIndices(query);
     var len = index.length;
     if (len == 0) {
         console.log('По запросу "' + query + '" совпадений не найдено');
@@ -29,7 +29,7 @@ module.exports.find = function find(query) {
 
 module.exports.remove = function remove(query) {
     query = query || '';
-    var index = findIndex(query);
+    var index = findIndices(query);
     var len = index.length;
     if (len == 0) {
         console.log('По запросу "' + query + '" совпадений не найдено');
@@ -37,8 +37,7 @@ module.exports.remove = function remove(query) {
     }
     var offset = 0;
     for (var i = 0; i < len; i++) {
-        var tail = phoneBook.splice(index[i] - offset).splice(1);
-        phoneBook = phoneBook.concat(tail);
+        phoneBook.splice(index[i] - offset, 1);
         offset++;
     }
     console.log('Удален ' + len + ' контакт');
@@ -59,7 +58,7 @@ module.exports.importFromCsv = function importFromCsv(filename) {
     return true;
 };
 
-module.exports.showTable = function showTable(filename) {
+module.exports.showTable = function showTable() {
     console.log('-----------------------------------------------------------------------\n' +
                 '|         Имя        |        Номер         |          Email          |\n' +
                 '-----------------------------------------------------------------------');
@@ -86,6 +85,10 @@ function displayContact(contact) {
 }
 
 function isValidNumber(number) {
+    if (number[0] == '-') {
+        console.log('Неправильный формат номера');
+        return false;
+    }
     var num = number.split(/[ -]/).join('');
     if (num[0] == '+') {
         num = num.substr(1);
@@ -95,11 +98,10 @@ function isValidNumber(number) {
         return false;
     }
     for (var i = 0; i < 4; i++) {
-        if (num[i] == '(') {
-            if (num[i + 4] !== ')') {
-                console.log('Неправильно расставлены скобки');
-                return false;
-            }
+        //не работает, если одна закрывающаяся
+        if ((num[i] == '(' && num[i + 4] !== ')') || (num[i] !== '(' && num[i + 4] == ')')) {
+            console.log('Неправильно расставлены скобки');
+            return false;
         }
     }
     var validCharReg = /^\d{0,2}\(?\d{3}\)?\d{3}\-?\d\-?\d{3}/;
@@ -112,7 +114,7 @@ function isValidNumber(number) {
 }
 
 function isValidEmail(email) {
-    var validReg = /[\w-]+\@([\w-]+\.\w+)+/;
+    var validReg = /^[\w\-А-яЁё]+\@([\w\-А-яЁё]+\.[\wА-яЁё]+)+/;
     var isValid = validReg.test(email);
     if (!isValid) {
         console.log('Неправильный формат email');
@@ -120,7 +122,7 @@ function isValidEmail(email) {
     return isValid;
 }
 
-function findIndex(query) {
+function findIndices(query) {
     var len = phoneBook.length;
     var index = [];
     for (var i = 0; i < len; i++) {
